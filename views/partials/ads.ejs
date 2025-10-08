@@ -1,0 +1,22 @@
+<% if (adData && adData.enableAds) { %>
+  <!-- Google AdSense -->
+  <div style="text-align:center; margin: 20px 0;">
+    <script async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<%= adData.adsenseClient %>"
+      crossorigin="anonymous"></script>
+
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="<%= adData.adsenseClient %>"
+         data-ad-slot="<%= adData.adsenseSlot %>"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Adsterra -->
+  <div style="text-align:center; margin: 20px 0;">
+    <script type="text/javascript" src="<%= adData.adsterraSrc %>"></script>
+  </div>
+<% } %>
