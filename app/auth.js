@@ -8,8 +8,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
 const axios = require("axios");
 
-const Keyv = require("keyv");
-const db = new Keyv(process.env.KEYV_URI);
+// Use your custom SQLite wrapper
+const db = require("../handlers/db");
 
 const provider = {
   url: process.env.PROVIDER_URL,
@@ -226,14 +226,18 @@ router.get("/reset-password", ensureAuthenticated, async (req, res) => {
     const user = await db.get(`user-${email}`);
     const newPassword = generateRandomString(process.env.PASSWORD_LENGTH || 12);
 
-    await axios.patch(`${provider.url}/api/application/users/${user.id}`, {
-      email,
-      username: user.username,
-      first_name: "Reset",
-      last_name: "user",
-      language: "en",
-      password: newPassword,
-    }, { headers: { Authorization: `Bearer ${provider.key}` } });
+    await axios.patch(
+      `${provider.url}/api/application/users/${user.id}`,
+      {
+        email,
+        username: user.username,
+        first_name: "Reset",
+        last_name: "user",
+        language: "en",
+        password: newPassword,
+      },
+      { headers: { Authorization: `Bearer ${provider.key}` } }
+    );
 
     user.password = newPassword;
     await db.set(`user-${email}`, user);
